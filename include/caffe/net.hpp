@@ -28,6 +28,10 @@ class Net {
       const int level = 0, const vector<string>* stages = NULL);
   virtual ~Net() {}
 
+  typedef typename vector<shared_ptr<Layer<Dtype> > >::const_iterator const_iterator;
+  const const_iterator begin() const { return layers_.begin(); }
+  const const_iterator end() const { return layers_.end(); }
+
   /// @brief Initialize a network with a NetParameter.
   void Init(const NetParameter& param);
 

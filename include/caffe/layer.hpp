@@ -19,6 +19,8 @@ namespace boost { class mutex; }
 
 namespace caffe {
 
+template<typename Dtype> class Net;
+
 /**
  * @brief An interface for the units of computation which can be composed into a
  *        Net.
@@ -291,6 +293,22 @@ class Layer {
     param_propagate_down_[param_id] = value;
   }
 
+  /**
+ * @brief get the pointer to the parent network that holds this layer
+ * (needed by apply_deformation_layer)
+ */
+inline const Net<Dtype>* parent_net() const {
+  CHECK_NOTNULL( parent_net_);
+  return parent_net_;
+}
+
+/**
+ * @brief set the pointer to the parent network that holds this layer
+ * (needed by apply_deformation_layer)
+ */
+inline void set_parent_net( const Net<Dtype>* net) {
+  parent_net_ = net;
+}
 
  protected:
   /** The protobuf that stores the layer parameters */
@@ -301,6 +319,8 @@ class Layer {
   vector<shared_ptr<Blob<Dtype> > > blobs_;
   /** Vector indicating whether to compute the diff of each param blob. */
   vector<bool> param_propagate_down_;
+
+  const Net<Dtype>* parent_net_;
 
   /** The vector that indicates whether each top blob has a non-zero weight in
    *  the objective function. */

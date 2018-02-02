@@ -405,6 +405,13 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional TileParameter tile_param = 138;
   optional WindowDataParameter window_data_param = 129;
+
+  optional LabelToOnehotParameter label_to_onehot_param = 999;
+  optional OGNDataParameter ogn_data_param = 1000;
+  optional OGNLossPrepParameter ogn_loss_prep_param = 1001;
+  optional OGNConvParameter ogn_conv_param = 1002;
+  optional OGNPropParameter ogn_prop_param = 1003;
+  optional OGNOutputParameter ogn_output_param = 1004;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1196,6 +1203,49 @@ message WindowDataParameter {
   optional bool cache_images = 12 [default = false];
   // append root_folder to locate images
   optional string root_folder = 13 [default = ""];
+}
+
+
+
+message LabelToOnehotParameter{
+  optional uint32 num_output = 1;
+}
+
+message OGNDataParameter{
+  optional uint32 batch_size = 1;
+  optional string source = 2;
+  optional bool preload_data = 3 [default = true];
+}
+
+message OGNLossPrepParameter {
+    optional string gt_key_layer = 1;
+    optional string pr_key_layer = 2;
+    optional bool use_voxel_grid = 3 [default = false];
+}
+
+message OGNConvParameter {
+    optional bool is_deconv = 1;
+    optional uint32 filter_size = 2;
+    optional uint32 output_channels = 3;
+    optional FillerParameter weight_filler = 4;
+    optional FillerParameter bias_filler = 5;
+    optional string key_layer = 6;
+}
+
+message OGNPropParameter {
+  
+  enum PropagationMode {
+    PROP_PRED = 0;
+    PROP_KNOWN = 1;
+  }
+
+    optional string key_layer = 1;
+    optional PropagationMode prop_mode = 2;
+}
+
+message OGNOutputParameter {
+    optional string output_path = 1;
+    repeated string key_layer = 2;
 }
 
 message SPPParameter {
